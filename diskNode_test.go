@@ -6,9 +6,6 @@ import (
 	"testing"
 )
 
-func initBlockService() blockService {
-	return initBlockServiceV1()
-}
 
 func printNodeElements(n *DiskNode) {
 	for i := 0; i < len(n.getElements()); i++ {

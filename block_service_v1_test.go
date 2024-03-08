@@ -1,28 +1,8 @@
 package cutedb
 
 import (
-	"os"
 	"testing"
 )
-
-func initBlockServiceV1() *blockServiceV1 {
-	path := "./db/test.db"
-	if _, err := os.Stat(path); os.IsNotExist(err) {
-		os.Mkdir("./db", os.ModePerm)
-	}
-	if _, err := os.Stat(path); err == nil {
-		// path/to/whatever exists
-		err := os.Remove(path)
-		if err != nil {
-			panic(err)
-		}
-	}
-	file, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE, 0666)
-	if err != nil {
-		panic(err)
-	}
-	return newblockServiceV1(file)
-}
 
 func TestShouldGetNegativeIfBlockNotPresent(t *testing.T) {
 	blockService := initBlockServiceV1()

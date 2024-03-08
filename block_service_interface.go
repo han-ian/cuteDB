@@ -17,3 +17,7 @@ type blockService interface {
 	rootBlockExists() bool
 	getMaxLeafSize() int
 }
+
+func initBlockService() blockService {
+	return initBlockServiceV1()
+}

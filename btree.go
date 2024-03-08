@@ -1,7 +1,5 @@
 package cutedb
 
-import "os"
-
 // btree - Our in memory btree struct
 type btree struct {
 	root node
@@ -20,17 +18,8 @@ func (bt *btree) isRootNode(n node) bool {
 
 // NewBtree - Create a new btree
 func initializeBtree(path ...string) (*btree, error) {
-	if len(path) == 0 {
-		path = make([]string, 1)
-		path[0] = "./db/freedom.db"
-	}
-
-	file, err := os.OpenFile(path[0], os.O_RDWR|os.O_CREATE, 0666)
-	if err != nil {
-		return nil, err
-	}
-	bsV1 := newblockServiceV1(file)
-	dns := newDiskNodeService(bsV1)
+	bs := initBlockService()
+	dns := newDiskNodeService(bs)
 
 	root, err := dns.getRootNodeFromDisk()
 	if err != nil {
