@@ -31,7 +31,7 @@ func TestBtreeInsert(t *testing.T) {
 		}
 		tree.insert(newPair(key, value))
 	}
-	// tree.root.PrintTree()
+	tree.print()
 }
 
 func TestBtreeGet(t *testing.T) {

@@ -47,3 +47,7 @@ func (bt *btree) get(key string) (string, bool, error) {
 func (bt *btree) setRootNode(n node) {
 	bt.root = n
 }
+
+func (bt *btree) print() {
+	bt.root.printTree(0)
+}

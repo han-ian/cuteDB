@@ -5,7 +5,7 @@ import (
 )
 
 func TestShouldGetNegativeIfBlockNotPresent(t *testing.T) {
-	blockService := initBlockServiceV1()
+	blockService := initBlockService()
 	latestBlockID, _ := blockService.getLatestBlockID()
 	if latestBlockID != -1 {
 		t.Error("Should get negative block id")
@@ -13,7 +13,7 @@ func TestShouldGetNegativeIfBlockNotPresent(t *testing.T) {
 }
 
 func TestShouldSuccessfullyInitializeNewBlock(t *testing.T) {
-	blockService := initBlockServiceV1()
+	blockService := initBlockService()
 	block, err := blockService.getRootBlock()
 	if err != nil {
 		t.Error(err)
@@ -28,7 +28,7 @@ func TestShouldSuccessfullyInitializeNewBlock(t *testing.T) {
 }
 
 func TestShouldSaveNewBlockOnDisk(t *testing.T) {
-	blockService := initBlockServiceV1()
+	blockService := initBlockService()
 	block, err := blockService.getRootBlock()
 	if err != nil {
 		t.Error(err)
@@ -77,7 +77,7 @@ func TestShouldConvertPairToAndFromBytes(t *testing.T) {
 }
 
 func TestShouldConvertBlockToAndFromBytes(t *testing.T) {
-	blockService := initBlockServiceV1()
+	blockService := initBlockService()
 	block := &diskBlock{}
 	block.setChildren([]uint64{2, 3, 4, 6})
 
@@ -86,7 +86,7 @@ func TestShouldConvertBlockToAndFromBytes(t *testing.T) {
 	elements[1] = newPair("foo", "bar")
 	elements[2] = newPair("gooz", "bumps")
 	block.setData(elements)
-	blockBuffer := blockService.getBufferFromBlock(block)
+	blockBuffer := block.getBufferFromBlock()
 	convertedBlock := blockService.getBlockFromBuffer(blockBuffer)
 
 	if convertedBlock.childrenBlockIds[2] != 4 {
@@ -107,14 +107,14 @@ func TestShouldConvertBlockToAndFromBytes(t *testing.T) {
 }
 
 func TestShouldConvertToAndFromDiskNode(t *testing.T) {
-	bs := initBlockServiceV1()
+	bs := initBlockService()
 	node := &DiskNode{}
 	node.blockID = 55
 	elements := make([]*pairs, 3)
 	elements[0] = newPair("hola", "amigos")
 	node.keys = elements
 	node.childrenBlockIDs = []uint64{1000, 10001}
-	block := bs.convertDiskNodeToBlock(node)
+	block := node.convertDiskNodeToBlock()
 
 	if block.id != 55 {
 		t.Error("Should have same block id as node block id")

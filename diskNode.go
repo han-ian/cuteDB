@@ -156,7 +156,7 @@ func (n *DiskNode) getChildBlockIDs() []uint64 {
 }
 
 func (n *DiskNode) printNode() {
-	fmt.Println("Printing Node")
+	fmt.Printf("Printing Node, id[%d]\n", n.blockID)
 	fmt.Println("--------------")
 	for i := 0; i < len(n.getElements()); i++ {
 		fmt.Println(n.getElementAtIndex(i))
@@ -440,4 +440,19 @@ func (n *DiskNode) insertPair(value *pairs, bt *btree) error {
 
 func (n *DiskNode) getValue(key string) (string, error) {
 	return n.search(key)
+}
+
+func (node *DiskNode) convertDiskNodeToBlock() *diskBlock {
+	block := &diskBlock{id: node.blockID}
+	tempElements := make([]*pairs, len(node.getElements()))
+	for index, element := range node.getElements() {
+		tempElements[index] = element
+	}
+	block.setData(tempElements)
+	tempBlockIDs := make([]uint64, len(node.getChildBlockIDs()))
+	for index, childBlockID := range node.getChildBlockIDs() {
+		tempBlockIDs[index] = childBlockID
+	}
+	block.setChildren(tempBlockIDs)
+	return block
 }
