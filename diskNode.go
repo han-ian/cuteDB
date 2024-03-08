@@ -45,7 +45,7 @@ type DiskNode struct {
 	keys             []*pairs
 	childrenBlockIDs []uint64
 	blockID          uint64
-	blockService     *blockService
+	blockService     blockService
 }
 
 func (n *DiskNode) isLeaf() bool {
@@ -256,7 +256,7 @@ func (n *DiskNode) addPoppedUpElementIntoCurrentNodeAndUpdateWithNewChildren(ele
 }
 
 // newLeafNode - Create a new leaf node without children
-func newLeafNode(elements []*pairs, bs *blockService) (*DiskNode, error) {
+func newLeafNode(elements []*pairs, bs blockService) (*DiskNode, error) {
 	node := &DiskNode{keys: elements, blockService: bs}
 	//persist the node to disk
 	err := bs.saveNewNodeToDisk(node)
@@ -267,7 +267,7 @@ func newLeafNode(elements []*pairs, bs *blockService) (*DiskNode, error) {
 }
 
 // newNodeWithChildren - Create a non leaf node with children
-func newNodeWithChildren(elements []*pairs, childrenBlockIDs []uint64, bs *blockService) (*DiskNode, error) {
+func newNodeWithChildren(elements []*pairs, childrenBlockIDs []uint64, bs blockService) (*DiskNode, error) {
 	node := &DiskNode{keys: elements, childrenBlockIDs: childrenBlockIDs, blockService: bs}
 	//persist this node to disk
 	err := bs.saveNewNodeToDisk(node)
@@ -279,7 +279,7 @@ func newNodeWithChildren(elements []*pairs, childrenBlockIDs []uint64, bs *block
 
 // newRootNodeWithSingleElementAndTwoChildren - Create a new root node
 func newRootNodeWithSingleElementAndTwoChildren(element *pairs, leftChildBlockID uint64,
-	rightChildBlockID uint64, bs *blockService) (*DiskNode, error) {
+	rightChildBlockID uint64, bs blockService) (*DiskNode, error) {
 	elements := []*pairs{element}
 	childrenBlockIDs := []uint64{leftChildBlockID, rightChildBlockID}
 	node := &DiskNode{keys: elements, childrenBlockIDs: childrenBlockIDs, blockService: bs}

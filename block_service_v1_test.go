@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func initBlockService() *blockService {
+func initBlockServiceV1() *blockServiceV1 {
 	path := "./db/test.db"
 	if _, err := os.Stat(path); os.IsNotExist(err) {
 		os.Mkdir("./db", os.ModePerm)
@@ -21,11 +21,11 @@ func initBlockService() *blockService {
 	if err != nil {
 		panic(err)
 	}
-	return newBlockService(file)
+	return newblockServiceV1(file)
 }
 
 func TestShouldGetNegativeIfBlockNotPresent(t *testing.T) {
-	blockService := initBlockService()
+	blockService := initBlockServiceV1()
 	latestBlockID, _ := blockService.getLatestBlockID()
 	if latestBlockID != -1 {
 		t.Error("Should get negative block id")
@@ -33,7 +33,7 @@ func TestShouldGetNegativeIfBlockNotPresent(t *testing.T) {
 }
 
 func TestShouldSuccessfullyInitializeNewBlock(t *testing.T) {
-	blockService := initBlockService()
+	blockService := initBlockServiceV1()
 	block, err := blockService.getRootBlock()
 	if err != nil {
 		t.Error(err)
@@ -48,7 +48,7 @@ func TestShouldSuccessfullyInitializeNewBlock(t *testing.T) {
 }
 
 func TestShouldSaveNewBlockOnDisk(t *testing.T) {
-	blockService := initBlockService()
+	blockService := initBlockServiceV1()
 	block, err := blockService.getRootBlock()
 	if err != nil {
 		t.Error(err)
@@ -97,7 +97,7 @@ func TestShouldConvertPairToAndFromBytes(t *testing.T) {
 }
 
 func TestShouldConvertBlockToAndFromBytes(t *testing.T) {
-	blockService := initBlockService()
+	blockService := initBlockServiceV1()
 	block := &diskBlock{}
 	block.setChildren([]uint64{2, 3, 4, 6})
 
@@ -127,7 +127,7 @@ func TestShouldConvertBlockToAndFromBytes(t *testing.T) {
 }
 
 func TestShouldConvertToAndFromDiskNode(t *testing.T) {
-	bs := initBlockService()
+	bs := initBlockServiceV1()
 	node := &DiskNode{}
 	node.blockID = 55
 	elements := make([]*pairs, 3)

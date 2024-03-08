@@ -29,7 +29,8 @@ func initializeBtree(path ...string) (*btree, error) {
 	if err != nil {
 		return nil, err
 	}
-	dns := newDiskNodeService(file)
+	bsV1 := newblockServiceV1(file)
+	dns := newDiskNodeService(bsV1)
 
 	root, err := dns.getRootNodeFromDisk()
 	if err != nil {
